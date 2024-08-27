@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,34 +8,34 @@ datasource db {
 }
 
 model Task {
-  id          Int        @id @default(autoincrement())
+  id          String     @id @default(uuid())
   title       String
   description String?
   priority    Boolean
   deadline    DateTime?
   status      TaskStatus @default(TO_DO)
 
-  Column   Column? @relation(fields: [columnId], references: [id])
-  columnId Int?
+  Column   Column @relation(fields: [columnId], references: [id])
+  columnId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Column {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   name  String
   tasks Task[]
 
-  Board     Board?   @relation(fields: [boardId], references: [id])
-  boardId   Int?
-  
+  Board   Board  @relation(fields: [boardId], references: [id])
+  boardId String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Board {
-  id      Int      @id @default(autoincrement())
+  id      String   @id @default(uuid())
   name    String
   columns Column[]
 
