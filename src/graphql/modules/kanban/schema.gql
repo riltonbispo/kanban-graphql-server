@@ -1,50 +1,47 @@
-# Enum para o status da tarefa
 enum TaskStatus {
   TO_DO
   IN_PROGRESS
   COMPLETED
 }
 
-# Type que define a Tarefa
 type Task {
   id: ID!
   title: String!
   description: String
-  priority: Boolean! # Define se é prioridade ou não
-  deadline: String # Prazo de entrega da tarefa
-  status: TaskStatus! # Status atual da tarefa
+  priority: Boolean! 
+  deadline: String
+  status: TaskStatus!
+  boardId: String!
 }
 
-# Type que define a Coluna
-type Column {
-  id: ID!
-  name: String!
-  tasks: [Task!]! # Cada coluna contém várias tarefas
-}
-
-# Type que define o Quadro
 type Board {
   id: ID!
   name: String!
-  columns: [Column!]! # O quadro contém várias colunas
+  Tasks: [Task!]!
 }
 
-# Queries para obter os dados
 type Query {
-  getBoard(id: ID!): Board
-  getTask(id: ID!): Task
-  getTasksByStatus(status: TaskStatus!): [Task!]!
+  boards: [Board]
+  tasks: [Task]
 }
 
-# Mutations para criar, atualizar ou mover tarefas entre colunas
+input taskInput {
+  title: String!
+  description: String
+  priority: Boolean!
+  deadline: String
+  status: TaskStatus!
+}
+
+input boardInput {
+  name: String!
+}
+
 type Mutation {
-  createTask(title: String!, description: String, priority: Boolean!, deadline: String): Task!
-  updateTask(id: ID!, title: String, description: String, priority: Boolean, deadline: String, status: TaskStatus): Task!
-  moveTaskToColumn(taskId: ID!, columnId: ID!): Task!
-  deleteTask(id: ID!): Boolean
+  createBoard(data: boardInput): Board!
+  createTask(data: taskInput): Task!
 }
 
-# Schema principal
 schema {
   query: Query
   mutation: Mutation
